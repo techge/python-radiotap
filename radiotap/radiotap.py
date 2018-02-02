@@ -47,6 +47,56 @@ mcs_rate_table = [
     (260.00, 288.80, 540.00, 600.00),
 ]
 
+# frame type mapping
+frame_type = {
+    0: (0, "Management"),
+    1: (1, "Control"),
+    2: (2, "Data"),
+}
+
+# frame subtype mapping
+frame_subtype = {
+    # Management frames
+    0x00: (0x00, "Association Request"),
+    0x01: (0x01, "Association Response"),
+    0x02: (0x02, "Reassociation Request"),
+    0x03: (0x03, "Reassociation Response"),
+    0x04: (0x04, "Probe Request"),
+    0x05: (0x05, "Probe Response"),
+    0x08: (0x08, "Beacon"),
+    0x09: (0x09, "ATIM"),
+    0x0A: (0x0A, "Disassociation"),
+    0x0B: (0x0B, "Authentication"),
+    0x0C: (0x0C, "Deauthentication"),
+    0x0D: (0x0D, "Action"),
+    # Control frames
+    0x18: (0x18, "Block Ack Request"),
+    0x19: (0x19, "Block Ack"),
+    0x1A: (0x1A, "PS-Poll"),
+    0x1B: (0x1B, "RTS"),
+    0x1C: (0x1C, "CTS"),
+    0x1D: (0x1D, "ACK"),
+    0x1E: (0x1E, "CF-end"),
+    0x1F: (0x1F, "CF-end + CF-ack"),
+    # Data frames
+    0x20: (0x20, "Data"),
+    0x21: (0x21, "Data + CF-ack"),
+    0x22: (0x22, "Data + CF-poll"),
+    0x23: (0x23, "Data + CF-ack + CF-poll"),
+    0x24: (0x24, "Null"),
+    0x25: (0x25, "CF-ack"),
+    0x26: (0x26, "CF-poll"),
+    0x27: (0x27, "CF-ack + CF-poll"),
+    0x28: (0x28, "QoS data"),
+    0x29: (0x29, "QoS data + CF-ack"),
+    0x2A: (0x2A, "QoS data + CF-poll"),
+    0x2B: (0x2B, "QoS data + CF-ack + CF-poll"),
+    0x2C: (0x2C, "QoS Null"),
+    0x2E: (0x2E, "QoS + CF-poll (no data)"),
+    0x2F: (0x2F, "QoS + Cf-ack (no data)"),
+}
+
+
 def align(val, align):
     return (val + align - 1) & ~(align-1)
 
@@ -350,7 +400,7 @@ def radiotap_parse(packet, valuelist=False):
     return radiotap_len, radiotap
 
 def macstr(macbytes):
-    return ':'.join(['%02x' % ord(k) for k in macbytes])
+    return ':'.join(['%02x' % k for k in macbytes])
 
 def is_blkack(mac):
     fc = mac.get('fc', 0)
@@ -387,9 +437,16 @@ def ieee80211_parse(packet, offset):
     fc, duration, addr1 = \
         struct.unpack_from(hdr_fmt, packet, offset)
 
+    fc_detail= {
+        'protocol': int(0x3 & fc),
+        'type': frame_type[(0x3 & fc>>2)],
+        'subtype': frame_subtype[(0x30 & fc<<2) | (0xf & fc>>4)],
+    }
+
     offset += hdr_len
     mac = {
         'fc': fc,
+        'fc_full': fc_full,
         'duration': duration * .001024,
         'addr1': macstr(addr1),
     }
