@@ -446,7 +446,7 @@ def ieee80211_parse(packet, offset):
     offset += hdr_len
     mac = {
         'fc': fc,
-        'fc_full': fc_full,
+        'fc_detail': fc_detail,
         'duration': duration * .001024,
         'addr1': macstr(addr1),
     }
