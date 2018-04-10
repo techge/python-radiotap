@@ -69,20 +69,32 @@ frame_type = {
 
 # frame subtype mapping
 frame_subtype = {
-    # Management frames
+# Management frames
     0x00: (0x00, "Association Request"),
     0x01: (0x01, "Association Response"),
     0x02: (0x02, "Reassociation Request"),
     0x03: (0x03, "Reassociation Response"),
     0x04: (0x04, "Probe Request"),
     0x05: (0x05, "Probe Response"),
+    0x06: (0x06, "Timing Advertisment"),
+    #0x07: (0x07, "Reserved"),
     0x08: (0x08, "Beacon"),
     0x09: (0x09, "ATIM"),
     0x0A: (0x0A, "Disassociation"),
     0x0B: (0x0B, "Authentication"),
     0x0C: (0x0C, "Deauthentication"),
     0x0D: (0x0D, "Action"),
-    # Control frames
+    0x0E: (0x0E, "Action No Ack"),
+    #0x0F: (0x0F, "Reserved"),
+# Control frames
+    #0x10: (0x10, "Reserved"),
+    #0x11: (0x11, "Reserved"),
+    #0x12: (0x12, "Reserved"),
+    #0x13: (0x13, "Reserved"),
+    0x14: (0x14, "Beamforming Report Poll"),
+    0x15: (0x15, "VHT NDP Announcement"),
+    0x16: (0x16, "Control Frame Extension"),
+    0x17: (0x17, "Control Wrapper"),
     0x18: (0x18, "Block Ack Request"),
     0x19: (0x19, "Block Ack"),
     0x1A: (0x1A, "PS-Poll"),
@@ -91,7 +103,7 @@ frame_subtype = {
     0x1D: (0x1D, "ACK"),
     0x1E: (0x1E, "CF-end"),
     0x1F: (0x1F, "CF-end + CF-ack"),
-    # Data frames
+# Data frames
     0x20: (0x20, "Data"),
     0x21: (0x21, "Data + CF-ack"),
     0x22: (0x22, "Data + CF-poll"),
@@ -105,8 +117,14 @@ frame_subtype = {
     0x2A: (0x2A, "QoS data + CF-poll"),
     0x2B: (0x2B, "QoS data + CF-ack + CF-poll"),
     0x2C: (0x2C, "QoS Null"),
+    #0x2D: (0x2D, "Reserved"),
     0x2E: (0x2E, "QoS + CF-poll (no data)"),
     0x2F: (0x2F, "QoS + Cf-ack (no data)"),
+# Extension
+    0x30: (0x30, "DMG Beacon"),
+    #0x31: (0x31, "Reserved"),
+    #...
+    #0x3F: (0x3F, "Reserved"),
 }
 
 
